@@ -1,0 +1,21 @@
+{% extends 'catalog/base.html' %}
+{% load my_tags %}
+{% block title %}Детали товара{% endblock %}
+{% block content %}
+<div class="card">
+  <img src="{{ product.image|media_filter }}" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">{{ product.name }}</h5>
+    <p class="card-text">{{ product.description }}</p>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Категория: {{ product.category }}</li>
+    <li class="list-group-item">Стоимость: {{ product.price }} RUB</li>
+    <li class="list-group-item">Создано: {{ product.created_at|date:"d M Y" }}</li>
+    <li class="list-group-item">Обновлено: {{ product.updated_at|date:"d M Y" }}</li>
+  </ul>
+  <div class="card-body">
+    <a href="{% url 'catalog:home' %}" class="btn btn-primary">Назад</a>
+  </div>
+</div>
+{% endblock %}
