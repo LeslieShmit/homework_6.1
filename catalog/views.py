@@ -5,6 +5,9 @@ from .models import Product
 def home(request):
     products = Product.objects.all()
     context = {'products' : products}
+    data_to_console = Product.objects.order_by('-created_at')[:5]
+    for el in data_to_console:
+        print(f'{el.name} - {el.created_at}')
     return render(request, 'catalog/home.html', context)
 
 def contacts(request):
