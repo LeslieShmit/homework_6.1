@@ -18,7 +18,7 @@ class ProductListView(ListView):
 
 class ProductCreateView(CreateView):
     model = Product
-    template_name = 'catalog/product_form.html'
+    template_name = 'catalog/blog_form.html'
     fields = ['name', 'description', 'image', 'category', 'price', ]
     success_url = reverse_lazy('catalog:home')
 
@@ -26,19 +26,19 @@ class ProductCreateView(CreateView):
 class ProductDetailView(DetailView):
     model = Product
     context_object_name = 'product'
-    template_name = 'catalog/product_details.html'
+    template_name = 'catalog/blog_details.html'
 
 
 class ProductUpdateView(UpdateView):
     model = Product
     fields = ['name', 'description', 'image', 'category', 'price', ]
-    template_name = 'catalog/product_form.html'
+    template_name = 'catalog/blog_form.html'
     success_url = reverse_lazy('catalog:home')
 
 
 class ProductDeleteView(DeleteView):
     model = Product
-    template_name = 'catalog/product_confirm_delete.html'
+    template_name = 'catalog/blog_confirm_delete.html'
     success_url = reverse_lazy('catalog:home')
 
 
