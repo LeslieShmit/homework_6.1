@@ -7,7 +7,7 @@ class Blog(models.Model):
                               help_text='Загрузите изображение для превью')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     is_published = models.BooleanField(default=True, verbose_name='Признак публикации', help_text='Укажите, была ли статья опубликована')
-    views_counter = models.PositiveIntegerField(verbose_name='Счетчик просмотров')
+    views_counter = models.PositiveIntegerField(verbose_name='Счетчик просмотров', default=0)
 
     def __str__(self):
         return self.title

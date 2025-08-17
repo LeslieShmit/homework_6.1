@@ -15,7 +15,7 @@ class BlogListView(ListView):
 
 class BlogCreateView(CreateView):
     model = Blog
-    template_name = 'Blog/product_form.html'
+    template_name = 'Blog/blog_form.html'
     fields = ['title', 'content', 'image', 'is_published',]
     success_url = reverse_lazy('blog:home')
 
@@ -28,7 +28,7 @@ class BlogDetailView(DetailView):
 
 class BlogUpdateView(UpdateView):
     model = Blog
-    fields = ['name', 'description', 'image', 'category', 'price', ]
+    fields = ['title', 'content', 'image', 'is_published',]
     template_name = 'Blog/blog_form.html'
     success_url = reverse_lazy('blog:home')
 

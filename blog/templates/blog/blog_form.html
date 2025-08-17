@@ -1,10 +1,10 @@
-{% extends 'catalog/base.html' %}
+{% extends 'blog/base.html' %}
 {% load my_tags %}
 
-{% block title %}Форма товара{% endblock %}
+{% block title %}Форма статьи{% endblock %}
 
 {% block content %}
-<h2>Форма товара</h2>
+<h2>Форма статьи</h2>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
