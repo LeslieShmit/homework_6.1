@@ -1,11 +1,15 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from .models import Product, Contact
+from django.core.paginator import Paginator
 
 def home(request):
-    products = Product.objects.all()
-    context = {'products' : products}
-    data_to_console = Product.objects.order_by('-created_at')[:5]
+    products = Product.objects.all().order_by('-created_at')
+    paginator = Paginator(products, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {'page_obj' : page_obj}
+    data_to_console = products[:5]
     for el in data_to_console:
         print(f'{el.name} - {el.created_at}')
     return render(request, 'catalog/home.html', context)
