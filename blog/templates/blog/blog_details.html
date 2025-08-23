@@ -1,0 +1,26 @@
+{% extends 'blog/base.html' %}
+{% load my_tags %}
+{% block title %}{{ blog.title }}{% endblock %}
+{% block content %}
+<div class="card">
+  <img src="{{ blog.image|media_filter }}" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">{{ blog.title }}</h5>
+    <p class="card-text">{{ blog.content }}</p>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Создано: {{ blog.created_at|date:"d M Y" }}</li>
+    {% if blog.is_published %}
+    <li class="list-group-item">Опубликовано</li>
+    {% else %}
+    <li class="list-group-item">Не опубликовано</li>
+    {% endif %}
+    <li class="list-group-item">Количество просмотров: {{ blog.views_counter }}</li>
+  </ul>
+  <div class="card-body">
+    <a href="{% url 'blog:home' %}" class="btn btn-primary">Назад</a>
+    <a href="{% url 'blog:blog_edit' blog.pk %}" class="btn btn-secondary">Изменить</a>
+    <a href="{% url 'blog:blog_delete' blog.pk %}" class="btn btn-danger">Удалить</a>
+  </div>
+</div>
+{% endblock %}
