@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Product, Contact
+from .forms import ProductForm
 
 from django.views import View
 from django.views.generic import ListView, DetailView
@@ -19,7 +20,7 @@ class ProductListView(ListView):
 class ProductCreateView(CreateView):
     model = Product
     template_name = 'catalog/product_form.html'
-    fields = ['name', 'description', 'image', 'category', 'price', ]
+    form_class = ProductForm
     success_url = reverse_lazy('catalog:home')
 
 
@@ -31,7 +32,7 @@ class ProductDetailView(DetailView):
 
 class ProductUpdateView(UpdateView):
     model = Product
-    fields = ['name', 'description', 'image', 'category', 'price', ]
+    form_class = ProductForm
     template_name = 'catalog/product_form.html'
     success_url = reverse_lazy('catalog:home')
 
