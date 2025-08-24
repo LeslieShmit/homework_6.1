@@ -7,6 +7,7 @@
 <h2>Форма товара</h2>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
+    {{ form.non_field.errors }}
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">Сохранить</button>
     <a href="{% url 'catalog:home' %}" class="btn btn primary">Отменить</a>
