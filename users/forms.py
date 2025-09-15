@@ -1,10 +1,19 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
+from .mixins import FormStyleMixin
 
-class CustomUserCreationForm(UserCreationForm):
-    phone_number = forms.CharField(required=False, max_length=15, help_text='Введите номер телефона (опционально)')
-    country = forms.CharField(required=False, max_length=50)
+
+class CustomUserCreationForm(FormStyleMixin, UserCreationForm):
+    phone_number = forms.CharField(
+        required=False,
+        max_length=15,
+        help_text='Введите номер телефона (опционально)'
+    )
+    country = forms.CharField(
+        required=False,
+        max_length=50,
+    )
 
     class Meta:
         model = CustomUser
@@ -13,5 +22,5 @@ class CustomUserCreationForm(UserCreationForm):
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get('phone_number')
         if phone_number and not phone_number.isdigit():
-            raise forms.ValidationError('Номер телефона может состоять только из цифр')
+            raise forms.ValidationError('Номер телефона может состоять только из цифр.')
         return phone_number
