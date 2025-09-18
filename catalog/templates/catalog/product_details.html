@@ -16,8 +16,12 @@
   </ul>
   <div class="card-body">
     <a href="{% url 'catalog:home' %}" class="btn btn-primary">Назад</a>
+    {% if perms.product.can_unpublish_product or user == product.owner %}
     <a href="{% url 'catalog:product_edit' product.pk %}" class="btn btn-secondary">Изменить</a>
+    {% endif %}
+    {% if perms.catalog.delete_product or user == product.owner %}
     <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger">Удалить</a>
+    {% endif %}
   </div>
 </div>
 {% endblock %}

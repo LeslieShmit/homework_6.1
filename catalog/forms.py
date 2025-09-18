@@ -3,39 +3,31 @@ from django.core.exceptions import ValidationError
 import os
 
 from .models import Product
+from .mixins import FormStyleMixin
 
-restricted_words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар', ]
+restricted_words = [
+    'казино', 'криптовалюта', 'крипта', 'биржа',
+    'дешево', 'бесплатно', 'обман', 'полиция', 'радар',
+]
 
 
-class ProductForm(forms.ModelForm):
+class ProductForm(FormStyleMixin, forms.ModelForm):
     class Meta:
         model = Product
-        exclude = ['created_at', 'updated_at']
-
-    def __init__(self, *args, **kwargs):
-        super(ProductForm, self).__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите наименование товара'})
-        self.fields['description'].widget.attrs.update(
-            {'class': 'form-control', 'placeholder': 'Введите описание товара'})
-        self.fields['image'].widget.attrs.update(
-            {'class': 'form-control'})
-        self.fields['category'].widget.attrs.update({'class': 'form-control'})
-        self.fields['price'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите стоимость товара'})
-        self.fields['is_available'].widget.attrs.update(
-            {'class': 'form-check-input'})
+        exclude = ['created_at', 'updated_at', 'owner']
 
     def clean_name(self):
         name = self.cleaned_data.get('name')
         for el in restricted_words:
-            if name.lower().find(el) != -1:
-                raise ValidationError(f'Наименование товара не может содержать слово {el}.')
+            if el in name.lower():
+                raise ValidationError(f'Наименование товара не может содержать слово "{el}".')
         return name
 
     def clean_description(self):
-        description  = self.cleaned_data.get('description')
+        description = self.cleaned_data.get('description')
         for el in restricted_words:
-            if description.lower().find(el) != -1:
-                raise ValidationError(f'Описание товара не может содержать слово {el}.')
+            if el in description.lower():
+                raise ValidationError(f'Описание товара не может содержать слово "{el}".')
         return description
 
     def clean_price(self):
@@ -62,4 +54,7 @@ class ProductForm(forms.ModelForm):
 
         return image
 
-
+class ProductModeratorForm(FormStyleMixin, forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['is_published', ]
