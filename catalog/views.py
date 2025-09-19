@@ -1,6 +1,8 @@
+from itertools import product
+
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Product, Contact
+from .models import Product, Contact, Category
 from .forms import ProductForm, ProductModeratorForm
 
 from django.views import View
@@ -9,6 +11,11 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+
+
+from .services import ProductService, get_products_from_cache
 
 
 class ProductListView(ListView):
@@ -17,6 +24,9 @@ class ProductListView(ListView):
     template_name = 'catalog/home.html'
     ordering = ['-created_at']
     paginate_by = 5
+
+    def get_queryset(self):
+        return get_products_from_cache()
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
@@ -32,11 +42,26 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         product.save()
         return super().form_valid(form)
 
-
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     context_object_name = 'product'
     template_name = 'catalog/product_details.html'
+
+class ProductByCategoryView(ListView):
+    model = Product
+    context_object_name = 'products'
+    template_name = 'catalog/products_by_category.html'
+
+    def get_queryset(self):
+        category_id = self.kwargs['category_id']
+        return ProductService.get_current_category_objects(category_id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category_id = self.kwargs['category_id']
+        context['category'] = Category.objects.get(pk=category_id)
+        return context
 
 
 class ProductUpdateView(LoginRequiredMixin, UpdateView):

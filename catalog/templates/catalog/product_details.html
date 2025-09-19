@@ -3,25 +3,28 @@
 {% block title %}Детали товара{% endblock %}
 {% block content %}
 <div class="card">
-  <img src="{{ product.image|media_filter }}" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">{{ product.name }}</h5>
-    <p class="card-text">{{ product.description }}</p>
-  </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">Категория: {{ product.category }}</li>
-    <li class="list-group-item">Стоимость: {{ product.price }} RUB</li>
-    <li class="list-group-item">Создано: {{ product.created_at|date:"d M Y" }}</li>
-    <li class="list-group-item">Обновлено: {{ product.updated_at|date:"d M Y" }}</li>
-  </ul>
-  <div class="card-body">
-    <a href="{% url 'catalog:home' %}" class="btn btn-primary">Назад</a>
-    {% if perms.product.can_unpublish_product or user == product.owner %}
-    <a href="{% url 'catalog:product_edit' product.pk %}" class="btn btn-secondary">Изменить</a>
-    {% endif %}
-    {% if perms.catalog.delete_product or user == product.owner %}
-    <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger">Удалить</a>
-    {% endif %}
-  </div>
+    <img src="{{ product.image|media_filter }}" class="card-img-top" alt="...">
+    <div class="card-body">
+        <h5 class="card-title">{{ product.name }}</h5>
+        <p class="card-text">{{ product.description }}</p>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Категория: {{ product.category }}</li>
+        <li class="list-group-item">Стоимость: {{ product.price }} RUB</li>
+        <li class="list-group-item">Создано: {{ product.created_at|date:"d M Y" }}</li>
+        <li class="list-group-item">Обновлено: {{ product.updated_at|date:"d M Y" }}</li>
+    </ul>
+    <div class="card-body">
+        <a href="{% url 'catalog:products_by_category' product.category.id %}" class="btn btn-primary">
+            Все товары категории "{{ product.category.name }}"
+        </a>
+        <a href="{% url 'catalog:home' %}" class="btn btn-primary">Назад</a>
+        {% if perms.product.can_unpublish_product or user == product.owner %}
+        <a href="{% url 'catalog:product_edit' product.pk %}" class="btn btn-secondary">Изменить</a>
+        {% endif %}
+        {% if perms.catalog.delete_product or user == product.owner %}
+        <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger">Удалить</a>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
